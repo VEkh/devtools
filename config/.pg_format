@@ -1,0 +1,3 @@
+# https://github.com/darold/pgFormatter/blob/master/doc/pg_format.conf.sample
+keyword-case=1
+spaces=2
