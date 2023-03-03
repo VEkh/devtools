@@ -1,12 +1,25 @@
 #!/bin/bash
-# shellcheck disable=2016
+# shellcheck disable=1012,2016
 
+app_dir=$(realpath "$(dirname "$0")/../")
 fmt_bold="\033[1m"
 fmt_cyan="\033[36m"
 fmt_green="\033[32m"
 fmt_reset="\033[0m"
 fmt_yellow="\033[33m"
 
+function create_symlinks() {
+  log_install_start "🔗 Symlinks"
+
+  config_files=($(ls -a "${app_dir}/config/"))
+
+  for file in "${config_files[@]}"; do
+    if [[ ! $file =~ ^\.{1,2}$|\.sw.*$ ]]; then
+      \rm -f "$HOME/$file"
+      ln -s "$app_dir/config/$file" "$HOME/$file"
+    fi
+  done
+}
 
 function install_pgformatter() {
   if [[ -n $(which pg_format) ]]; then
@@ -21,7 +34,7 @@ function install_pgformatter() {
   cd pgFormatter-${version}/ || exit
   perl Makefile.PL
   make && sudo make install
-  cd ../ && rm -rf v${version}.tar.gz && rm -rf pgFormatter-${version} #clean up
+  cd ../ && \rm -rf v${version}.tar.gz && rm -rf pgFormatter-${version} #clean up
 }
 
 
@@ -30,5 +43,6 @@ function log_install_start() {
 }
 
 install_pgformatter
+create_symlinks
 
 echo -e "${fmt_bold}${fmt_green}🎉 Successfully installed Dev Tools!${fmt_reset}"

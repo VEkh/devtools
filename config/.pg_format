@@ -1,3 +1,5 @@
 # https://github.com/darold/pgFormatter/blob/master/doc/pg_format.conf.sample
 keyword-case=1
+no-extra-line=1
+no-space-function=1
 spaces=2
