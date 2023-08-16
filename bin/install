@@ -1,7 +1,7 @@
 #!/bin/bash
 # shellcheck disable=1012,2016
 
-app_dir=$(realpath "$(dirname "$0")/../")
+app_dir=$(realpath "$(dirname "${BASH_SOURCE[0]}")/../")
 fmt_bold="\033[1m"
 fmt_cyan="\033[36m"
 fmt_green="\033[32m"
@@ -15,8 +15,8 @@ function create_symlinks() {
 
   for file in "${config_files[@]}"; do
     if [[ ! $file =~ ^\.{1,2}$|\.sw.*$ ]]; then
-      \rm -f "$HOME/$file"
-      ln -s "$app_dir/config/$file" "$HOME/$file"
+      \rm -f "${HOME}/${file}"
+      ln -s "${app_dir}/config/${file}" "${HOME}/${file}"
     fi
   done
 }
