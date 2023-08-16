@@ -1,0 +1,13 @@
+#!/bin/bash
+
+current_directory=$(realpath "$(dirname "$0")")
+bin_dir="${current_directory}/bin/"
+
+if [[ ! -d "$bin_dir" ]]; then exit 0; fi
+
+init_scripts=$(ls "$bin_dir")
+
+for filename in $init_scripts
+do
+  "$bin_dir/$filename"
+done

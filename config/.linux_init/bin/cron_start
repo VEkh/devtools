@@ -1,0 +1,10 @@
+#!/bin/bash
+fmt_bold="\033[1m"
+fmt_reset="\033[0m"
+fmt_yellow="\033[33m"
+
+if [[ $(sudo service cron status) =~ (not running)$ ]]
+then
+  echo -e "${fmt_bold}${fmt_yellow}Starting Cron ⏰${fmt_reset}"
+  sudo service cron start
+fi

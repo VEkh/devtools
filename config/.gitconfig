@@ -1,0 +1,15 @@
+[alias]
+  cheddar = commit --amend -CHEAD
+  doff = "!f(){ git reset --soft HEAD~ && git reset; }; f"
+  fixup = commit --fixup
+  put = push origin HEAD
+  save = "!f(){ git add -A && git commit -m wiop && git push --force && git doff; }; f"
+[push]
+  default = matching
+[rebase]
+    autosquash = true
+[user]
+  name = Vidal Ekechukwu
+  email = vekechuk@gmail.com
+[interactive]
+  singlekey = true # Dependency package: libterm-readkey-perl

@@ -1,0 +1,10 @@
+#!/bin/bash
+fmt_bold="\033[1m"
+fmt_reset="\033[0m"
+fmt_yellow="\033[33m"
+
+if [[ $(sudo service postgresql status) =~ down$ ]]
+then
+  echo -e "${fmt_bold}${fmt_yellow}Starting PostgreSQL 🐘${fmt_reset}"
+  sudo service postgresql start
+fi
