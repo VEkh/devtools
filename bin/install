@@ -21,6 +21,11 @@ function create_symlinks() {
   done
 }
 
+function init_git_submodules() {
+  log_install_start "🌿 Initializing Git Submodules"
+  sh -c "cd ${app_dir} && git submodule update --init --recursive"
+}
+
 function install_pgformatter() {
   if [[ -n $(which pg_format) ]]; then
     return 0
@@ -43,6 +48,7 @@ function log_install_start() {
 }
 
 install_pgformatter
+init_git_submodules
 create_symlinks
 
 echo -e "${fmt_bold}${fmt_green}🎉 Successfully installed Dev Tools!${fmt_reset}"
