@@ -1,6 +1,8 @@
 #!/bin/bash
 # shellcheck disable=1012,2016
 
+set -e
+
 app_dir=$(realpath "$(dirname "${BASH_SOURCE[0]}")/../")
 fmt_bold="\033[1m"
 fmt_cyan="\033[36m"
@@ -26,6 +28,22 @@ function init_git_submodules() {
   sh -c "cd ${app_dir} && git submodule update --init --recursive"
 }
 
+function install_apt_packages() {
+  to_install=()
+
+  for arg in "$@"; do
+    if ! (dpkg -l | grep -v "^rc" | grep "$arg" | awk '{print $2}' | grep -q "^$arg\(:\w\+\)\?$"); then
+      to_install+=("$arg")
+    fi
+  done
+
+  [[ "${#to_install[*]}" = "0" ]] && return 0
+
+  log_install_start "${to_install[*]}" && \
+  sudo apt-get install -y "${to_install[@]}"
+
+}
+
 function install_pgformatter() {
   if [[ -n $(which pg_format) ]]; then
     return 0
@@ -42,12 +60,36 @@ function install_pgformatter() {
   cd ../ && \rm -rf v${version}.tar.gz && rm -rf pgFormatter-${version} #clean up
 }
 
+function install_pip3_packages() {
+  to_install=()
+  installed_packages=$(pip3 list --format=columns)
+
+  for arg in "${@}"; do
+    if ! (echo -e "${installed_packages}" | grep -q "^${arg}\b"); then
+      log_install_start "🐍📦 Installing pip3 Package: ${arg}"
+      pip3 install "${arg}"
+    fi
+  done
+}
+
 
 function log_install_start() {
   echo -e "${fmt_bold}${fmt_yellow}📦 Installing ${fmt_reset}${fmt_cyan}$1${fmt_reset}"
 }
 
+if [[ $OSTYPE =~ ^linux.* ]]; then
+  packages=(
+    "make"
+    "python3"
+    "python3-pip"
+  )
+
+  sudo apt-get update
+  install_apt_packages "${packages[@]}"
+fi
+
 install_pgformatter
+install_pip3_packages "pynvim"
 init_git_submodules
 create_symlinks
 
