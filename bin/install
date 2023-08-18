@@ -6,6 +6,7 @@ set -e
 app_dir=$(realpath "$(dirname "${BASH_SOURCE[0]}")/../")
 
 # ASCII, install_apt_packages, install_asdf, install_language_from_asdf
+# shellcheck disable=1090,1091
 source "${app_dir}/config/.utils"
 
 function create_symlinks() {
@@ -27,7 +28,6 @@ function init_git_submodules() {
 }
 
 function install_node_global_packages() {
-  to_install=()
   installed_packages=$(npm list --global)
 
   for arg in "${@}"; do
@@ -55,7 +55,6 @@ function install_pgformatter() {
 }
 
 function install_pip3_packages() {
-  to_install=()
   installed_packages=$(pip3 list --format=columns)
 
   for arg in "${@}"; do
