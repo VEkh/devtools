@@ -4,11 +4,9 @@
 set -e
 
 app_dir=$(realpath "$(dirname "${BASH_SOURCE[0]}")/../")
-fmt_bold="\033[1m"
-fmt_cyan="\033[36m"
-fmt_green="\033[32m"
-fmt_reset="\033[0m"
-fmt_yellow="\033[33m"
+
+# ASCII, install_apt_packages, install_asdf, install_language_from_asdf
+source "${app_dir}/config/.utils"
 
 function create_symlinks() {
   log_install_start "🔗 Symlinks"
@@ -28,20 +26,16 @@ function init_git_submodules() {
   sh -c "cd ${app_dir} && git submodule update --init --recursive"
 }
 
-function install_apt_packages() {
+function install_node_global_packages() {
   to_install=()
+  installed_packages=$(npm list --global)
 
-  for arg in "$@"; do
-    if ! (dpkg -l | grep -v "^rc" | grep "$arg" | awk '{print $2}' | grep -q "^$arg\(:\w\+\)\?$"); then
-      to_install+=("$arg")
+  for arg in "${@}"; do
+    if ! (echo -e "${installed_packages}" | grep -q "${arg}@"); then
+      log_install_start "📦 Installing Node Package: ${arg}"
+      npm install --global "${arg}"
     fi
   done
-
-  [[ "${#to_install[*]}" = "0" ]] && return 0
-
-  log_install_start "${to_install[*]}" && \
-  sudo apt-get install -y "${to_install[@]}"
-
 }
 
 function install_pgformatter() {
@@ -72,25 +66,32 @@ function install_pip3_packages() {
   done
 }
 
-
 function log_install_start() {
-  echo -e "${fmt_bold}${fmt_yellow}📦 Installing ${fmt_reset}${fmt_cyan}$1${fmt_reset}"
+  ascii_print "📦 Installing ${ASCII["reset"]}${ASCII["cyan"]}${1}" "yellow"
 }
 
 if [[ $OSTYPE =~ ^linux.* ]]; then
   packages=(
-    "make"
-    "python3"
-    "python3-pip"
+    "libffi-dev" # Python
+    "libssl-dev" # Ruby
+    "libterm-readkey-perl" # Git commit singlekey
+    "libyaml-dev" # Ruby
+    "make" # Ruby
   )
 
   sudo apt-get update
   install_apt_packages "${packages[@]}"
 fi
 
+install_asdf
+install_language_from_asdf "nodejs" "18.17.1"
+install_language_from_asdf "python" "3.11.4"
+install_language_from_asdf "ruby" "3.2.2"
+install_node_global_packages "yarn"
 install_pgformatter
 install_pip3_packages "pynvim"
 init_git_submodules
 create_symlinks
 
-echo -e "${fmt_bold}${fmt_green}🎉 Successfully installed Dev Tools!${fmt_reset}"
+
+ascii_print "🎉 Successfully installed Dev Tools!" "green"
