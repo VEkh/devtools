@@ -59,6 +59,7 @@ set undofile
   \ 'html': ['prettier'],
   \ 'javascript': ['prettier'],
   \ 'json': ['prettier'],
+  \ 'python': ['black'],
   \ 'ruby': ['rubocop'],
   \ 'scss': ['prettier'],
   \ 'sql': ['pgformatter'],

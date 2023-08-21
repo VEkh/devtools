@@ -12,6 +12,7 @@ source "${app_dir}/config/.utils"
 function create_symlinks() {
   log_install_start "🔗 Symlinks"
 
+  # shellcheck disable=2207
   config_files=($(ls -a "${app_dir}/config/"))
 
   for file in "${config_files[@]}"; do
@@ -61,6 +62,8 @@ function install_pip3_packages() {
     if ! (echo -e "${installed_packages}" | grep -q "^${arg}\b"); then
       log_install_start "🐍📦 Installing pip3 Package: ${arg}"
       pip3 install "${arg}"
+
+      asdf reshim python
     fi
   done
 }
@@ -89,7 +92,7 @@ install_language_from_asdf "python" "3.11.4"
 install_language_from_asdf "ruby" "3.2.2"
 install_node_global_packages "yarn"
 install_pgformatter
-install_pip3_packages "pynvim"
+install_pip3_packages "black" "pynvim"
 init_git_submodules
 create_symlinks
 
