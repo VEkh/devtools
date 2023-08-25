@@ -79,6 +79,7 @@ if [[ $OSTYPE =~ ^linux.* ]]; then
     "libterm-readkey-perl" # Git commit singlekey
     "libyaml-dev" # Ruby
     "make" # Ruby
+    "ripgrep" # Ripgrep
     "shellcheck" # Shell formatting
   )
 
