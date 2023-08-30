@@ -103,3 +103,5 @@ if [ -d "$HOME/.gem" ]; then
 fi
 
 . $HOME/.asdf/completions/asdf.bash
+
+export PYTHONSTARTUP="${HOME}/.pythonstartup"

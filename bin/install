@@ -93,7 +93,7 @@ install_language_from_asdf "python" "3.11.4"
 install_language_from_asdf "ruby" "3.2.2"
 install_node_global_packages "yarn"
 install_pgformatter
-install_pip3_packages "black" "pynvim"
+install_pip3_packages "black" "gnureadline" "pynvim"
 init_git_submodules
 create_symlinks
 
