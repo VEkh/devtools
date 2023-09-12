@@ -74,13 +74,18 @@ function log_install_start() {
 
 if [[ $OSTYPE =~ ^linux.* ]]; then
   packages=(
+    "libbz2-dev" # Python
     "libffi-dev" # Python
-    "libssl-dev" # Ruby
+    "liblzma-dev" # Python
+    "libreadline-dev" # Python
+    "libsqlite3-dev" # Python
+    "libssl-dev" # Python, Ruby
     "libterm-readkey-perl" # Git commit singlekey
     "libyaml-dev" # Ruby
     "make" # Ruby
     "ripgrep" # Ripgrep
     "shellcheck" # Shell formatting
+    "tk-dev" # Python
   )
 
   sudo apt-get update
