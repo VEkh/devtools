@@ -33,7 +33,7 @@ function install_node_global_packages() {
 
   for arg in "${@}"; do
     if ! (echo -e "${installed_packages}" | grep -q "${arg}@"); then
-      log_install_start "📦 Installing Node Package: ${arg}"
+      log_install_start "📦 Node Package: ${arg}"
       npm install --global "${arg}"
     fi
   done
@@ -60,10 +60,21 @@ function install_pip3_packages() {
 
   for arg in "${@}"; do
     if ! (echo -e "${installed_packages}" | grep -q "^${arg}\b"); then
-      log_install_start "🐍📦 Installing pip3 Package: ${arg}"
+      log_install_start "🐍📦 pip3 Package: ${arg}"
       pip3 install "${arg}"
 
       asdf reshim python
+    fi
+  done
+}
+
+function install_yarn_global_packages() {
+  installed_packages=$(yarn global list)
+
+  for arg in "${@}"; do
+    if ! (echo -e "${installed_packages}" | grep -q "\- ${arg}\b"); then
+      log_install_start "🧶 Yarn Package: ${arg}"
+      yarn global add "${arg}"
     fi
   done
 }
@@ -97,6 +108,7 @@ install_language_from_asdf "nodejs" "18.17.1"
 install_language_from_asdf "python" "3.11.4"
 install_language_from_asdf "ruby" "3.2.2"
 install_node_global_packages "yarn"
+install_yarn_global_packages "prettier"
 install_pgformatter
 install_pip3_packages "black" "gnureadline" "pynvim"
 init_git_submodules
