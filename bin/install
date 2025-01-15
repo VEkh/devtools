@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # shellcheck disable=1012,2016
 
 set -e
@@ -17,7 +17,7 @@ function create_symlinks() {
 
   for file in "${config_files[@]}"; do
     if [[ ! $file =~ ^\.{1,2}$|\.sw.*$ ]]; then
-      \rm -f "${HOME}/${file}"
+      \rm -rf "${HOME}/${file}"
       ln -s "${app_dir}/config/${file}" "${HOME}/${file}"
     fi
   done
@@ -63,7 +63,9 @@ function install_pip3_packages() {
       log_install_start "🐍📦 pip3 Package: ${arg}"
       pip3 install "${arg}"
 
-      asdf reshim python
+      if $(asdf plugin list 2> /dev/null | grep -q "python"); then
+        asdf reshim python
+      fi
     fi
   done
 }
@@ -104,15 +106,14 @@ if [[ $OSTYPE =~ ^linux.* ]]; then
 fi
 
 install_asdf
-install_language_from_asdf "nodejs" "18.17.1"
-install_language_from_asdf "python" "3.11.4"
-install_language_from_asdf "ruby" "3.2.2"
+install_language_from_asdf "nodejs" "20.15.1"
+install_language_from_asdf "python" "3.13.1"
+install_language_from_asdf "ruby" "3.3.6"
 install_node_global_packages "yarn"
-install_yarn_global_packages "prettier"
+install_node_global_packages "prettier"
 install_pgformatter
 install_pip3_packages "black" "gnureadline" "pynvim"
 init_git_submodules
 create_symlinks
-
 
 ascii_print "🎉 Successfully installed Dev Tools!" "green"

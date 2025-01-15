@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # shellcheck disable=1090,1091
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
@@ -120,4 +122,3 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-

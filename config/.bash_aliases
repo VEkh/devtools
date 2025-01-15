@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 alias :w="echo 'You have been saved'"
 alias be="bundle exec"
