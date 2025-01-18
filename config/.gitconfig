@@ -5,7 +5,7 @@
   put = push origin HEAD
   save = "!f(){ git add -A && git commit -m wiop && git push --force && git doff; }; f"
 [push]
-  default = matching
+  default = upstream
 [rebase]
     autosquash = true
 [user]
