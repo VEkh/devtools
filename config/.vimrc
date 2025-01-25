@@ -1,6 +1,6 @@
 syntax on
 filetype plugin indent on
-colorscheme default
+silent! colorscheme sorbet
 
 "Abbreviations
 iabbrev bpry require 'pry'; binding.pry
@@ -22,6 +22,7 @@ nnoremap <C-f> :e#<CR>
 nnoremap <C-h> :tabprevious<CR>
 nnoremap <C-l> :tabnext<CR>
 nnoremap - :e %:h<CR>
+nnoremap <ESC><ESC> :noh<CR>
 
 imap OB <ESC>ji
 
@@ -32,6 +33,7 @@ set autoindent " Newline retains the preceding line's indentation
 set backspace=indent,eol,start
 set expandtab " Convert tabs to white spaces
 set hidden " Remember undo history across buffer changes
+set hlsearch " Highlight search results after search
 set ignorecase
 set list " Show whitespace markers
 set listchars=tab:·\ ,trail:• " Specify whitespace symbols
@@ -60,7 +62,7 @@ set undofile
   \ 'javascript': ['prettier'],
   \ 'json': ['prettier'],
   \ 'python': ['black'],
-  \ 'ruby': ['rubocop'],
+  \ 'ruby': ['standardrb', 'rubocop'],
   \ 'scss': ['prettier'],
   \ 'sql': ['pgformatter'],
   \ 'typescript': ['prettier'],
