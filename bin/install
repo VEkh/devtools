@@ -17,7 +17,7 @@ function create_symlinks() {
 
   for file in "${config_files[@]}"; do
     if [[ ! $file =~ ^\.{1,2}$|\.sw.*$ ]]; then
-      \rm -rf "${HOME}/${file}"
+      \rm -rf "${HOME:?}/${file}"
       ln -s "${app_dir}/config/${file}" "${HOME}/${file}"
     fi
   done
@@ -63,7 +63,7 @@ function install_pip3_packages() {
       log_install_start "🐍📦 pip3 Package: ${arg}"
       pip3 install "${arg}"
 
-      if $(asdf plugin list 2> /dev/null | grep -q "python"); then
+      if (asdf plugin list 2> /dev/null | grep -q "python"); then
         asdf reshim python
       fi
     fi
