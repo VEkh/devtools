@@ -76,3 +76,6 @@
 [submodule "config/.vim/pack/plugins/start/vim-turbux"]
 	path = config/.vim/pack/plugins/start/vim-turbux
 	url = https://github.com/jgdavey/vim-turbux.git
+[submodule "config/.vim/pack/plugins/start/vim-svelte-plugin"]
+	path = config/.vim/pack/plugins/start/vim-svelte-plugin
+	url = https://github.com/leafOfTree/vim-svelte-plugin.git
