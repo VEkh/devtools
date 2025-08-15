@@ -82,29 +82,23 @@ export rvmsudo_secure_path=1
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
-# asdf Version Manager
-source $HOME/.asdf/asdf.sh
-
-[ -n "$BASH_VERSION" ] && source "$HOME/.asdf/completions/asdf.bash"
+[ -n "$BASH_VERSION" ] && eval "$(${HOME}/.local/bin/mise activate bash)"
 
 if [ -n "$ZSH_VERSION" ]; then
-  # append completions to fpath
-  fpath=(${ASDF_DIR}/completions $fpath)
+  eval "$(${HOME}/.local/bin/mise activate zsh)"
 
-  # # initialise completions with ZSH's compinit
+  # initialize completions with ZSH's compinit
   autoload -Uz compinit && compinit
-fi
 
-# Yarn (Must come after asdf)
-export PATH="$PATH:`yarn global bin`"
+  # generate mise completions
+  eval "$(mise completion zsh)"
+fi
 
 # Install gems without sudo on Mac OSX
 if [ -d "$HOME/.gem" ]; then
   export GEM_HOME="$HOME/.gem"
   export PATH="$PATH:$GEM_HOME/bin"
 fi
-
-. $HOME/.asdf/completions/asdf.bash
 
 export PYTHONSTARTUP="${HOME}/.pythonstartup"
 
@@ -114,10 +108,10 @@ __conda_setup="$('/home/vekh/.miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/home/vekh/.miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/vekh/.miniconda3/etc/profile.d/conda.sh"
+    if [ -f "${HOME}/.miniconda3/etc/profile.d/conda.sh" ]; then
+        . "${HOME}/.miniconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/home/vekh/.miniconda3/bin:$PATH"
+        export PATH="${HOME}/.miniconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
