@@ -6,23 +6,12 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-if [ -n "$ZSH_VERSION" ]; then
-  bindkey -e # Emacs key bindings (ctrl+p, ctrl+n)
-  setopt prompt_subst # Prompt expression and parameter expansion
-  setopt nonomatch # zsh passes original glob upon fail
-fi
-
 # Global env vars
 export EDITOR=$(which vim)
 export ERL_AFLAGS="-kernel shell_history enabled"
+export PYTHONSTARTUP="${HOME}/.pythonstartup"
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export TZ=UTC # Set time zone to UTC
-
-# App settings
-export HACKTIVE_DIR=`echo ~/apps/hacktive`
-export HOTTSPOT_DIR=`echo ~/apps/hottspot`
-export HOTTSPOT_TAOBOT_REMOTE_HOST="red.vidalekechukwu.com"
-export RAILS_ENV="development"
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
@@ -33,7 +22,6 @@ HISTCONTROL=ignoredups:ignorespace
 
 # append to the history file, don't overwrite it
 [ -n "$BASH_VERSION" ] && shopt -s histappend
-[ -n "$ZSH_VERSION" ] && setopt APPEND_HISTORY
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=1000
@@ -41,7 +29,7 @@ HISTFILESIZE=2000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
-[ -n "$BASH_VERSION" ] && shopt -s checkwinsize
+shopt -s checkwinsize
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -51,56 +39,28 @@ HISTFILESIZE=2000
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-[ -f ~/.bash_aliases ] && source ~/.bash_aliases
-[ -f ~/.bash_functions ] && source ~/.bash_functions
-[ -f ~/.git-prompt.sh ] && source ~/.git-prompt.sh
-[ -n "$BASH_VERSION" -a -f ~/.bash_prompt ] && source ~/.bash_prompt
-[ -n "$ZSH_VERSION" -a -f ~/.zsh_prompt ] && source ~/.zsh_prompt
+[ -f "${HOME}/.aliases" ] && source "${HOME}/.aliases"
+[ -f "${HOME}/.functions" ] && source "${HOME}/.functions"
+[ -f "${HOME}/.git-prompt.sh" ] && source "${HOME}/.git-prompt.sh"
+[ -f "${HOME}/.bash_prompt" ] && source "${HOME}/.bash_prompt"
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-  . /etc/bash_completion
-fi
-[ -f ~/.bundler-exec.sh ] && source ~/.bundler-exec.sh
-
-if [ -f ~/.completions/exercism/exercism_completion.bash ]; then
-  source ~/.completions/exercism/exercism_completion.bash
+  source /etc/bash_completion
 fi
 
-# if [[ -f ~/.linux_init/init ]]; then ~/.linux_init/init; fi
+[ -f "${HOME}/.bundler-exec.sh" ] && source "${HOME}/.bundler-exec.sh"
 
-# phusion passenger settings
-export PATH=/usr/local/bin:$PATH
-
-# Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
-
-# RVM settings
-export rvmsudo_secure_path=1
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-
-[ -n "$BASH_VERSION" ] && eval "$(${HOME}/.local/bin/mise activate bash)"
-
-if [ -n "$ZSH_VERSION" ]; then
-  eval "$(${HOME}/.local/bin/mise activate zsh)"
-
-  # initialize completions with ZSH's compinit
-  autoload -Uz compinit && compinit
-
-  # generate mise completions
-  eval "$(mise completion zsh)"
+# Exercism
+if [ -f "${HOME}/.completions/exercism/exercism_completion.bash" ]; then
+  source "${HOME}/.completions/exercism/exercism_completion.bash"
 fi
 
-# Install gems without sudo on Mac OSX
-if [ -d "$HOME/.gem" ]; then
-  export GEM_HOME="$HOME/.gem"
-  export PATH="$PATH:$GEM_HOME/bin"
-fi
+# [[ -f "${HOME}/.linux_init/init" ]] && "${HOME}/.linux_init/init"
 
-export PYTHONSTARTUP="${HOME}/.pythonstartup"
+[[ -f "${HOME}/.local/bin/mise" ]] && eval "$(${HOME}/.local/bin/mise activate bash)"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

@@ -9,6 +9,25 @@ app_dir=$(realpath "$(dirname "${BASH_SOURCE[0]}")/../")
 # shellcheck disable=1090,1091
 source "${app_dir}/config/.utils"
 
+function configure_zsh() {
+  [[ -z $(which zsh) ]] && return 0
+
+  ascii_print "🐚 Configuring zsh" "cyan"
+
+  [[ ! "${SHELL}" =~ /zsh$ ]] && chsh -s "$(which zsh)"
+
+  if [[ ! -d "${HOME}/.oh-my-zsh" ]]; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  fi
+
+  custom_plugins_dir="${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins"
+
+  if [[ ! -d "${custom_plugins_dir}/zsh-autosuggestions" ]]; then
+    git clone https://github.com/zsh-users/zsh-autosuggestions \
+      ${custom_plugins_dir}/zsh-autosuggestions
+  fi
+}
+
 function create_symlinks() {
   log_install_start "🔗 Symlinks"
 
@@ -119,9 +138,11 @@ function install_linux_dependencies() {
     "libterm-readkey-perl" # Git commit singlekey
     "libyaml-dev" # Ruby
     "make" # Ruby
+    "ncdu" # Disk usage
     "ripgrep" # Ripgrep
     "shellcheck" # Shell formatting
     "tk-dev" # Python
+    "zsh" # Shell
   )
 
   sudo apt-get update
@@ -129,6 +150,7 @@ function install_linux_dependencies() {
 }
 
 install_linux_dependencies
+configure_zsh
 install_mise
 install_mise_tool "erlang" # Must install before elixir
 install_mise_config
