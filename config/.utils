@@ -40,58 +40,6 @@ function install_apt_packages() {
 
 }
 
-function install_asdf() {
-  app_dir=$(realpath "$(dirname "${BASH_SOURCE[0]}")/../")
-  asdf_completion_cmd='. $HOME/.asdf/completions/asdf.bash'
-  asdf_source_cmd='. $HOME/.asdf/asdf.sh'
-
-  [ ! -d "${HOME}/.asdf" ] && \
-    log_install_start "💻 asdf" && \
-    git clone https://github.com/asdf-vm/asdf.git ~/.asdf
-
-  bashrc_path="${app_dir}/config/.bashrc"
-
-  touch "${bashrc_path}"
-
-  bashrc_contents=$(cat "${bashrc_path}")
-
-  if ! (echo "${bashrc_contents}" | grep -q "${asdf_source_cmd}"); then
-    echo -e "\n${asdf_source_cmd}" >> "${bashrc_path}"
-  fi
-
-  if ! (echo "${bashrc_contents}" | grep -q "${asdf_completion_cmd}"); then
-    echo -e "\n${asdf_completion_cmd}" >> "${bashrc_path}"
-  fi
-}
-
-function install_language_from_asdf() {
-  asdf_bin="${HOME}/.asdf/bin/asdf"
-  language="${1}"
-  version="${2}"
-
-  if [[ ! -d "${HOME}/.asdf" ]]; then
-    ascii_print "❗ Install asdf before $(to_title "${language}") ${version}" "red"
-    install_asdf
-  fi
-
-  [ ! -d "${HOME}/.asdf/plugins/${language}" ] && \
-    log_install_start "$(to_title "${language}") plugin" && \
-    "${asdf_bin}" plugin add "${language}"
-
-  [ ! -d "${HOME}/.asdf/installs/${language}/${version}" ] && \
-    log_install_start "💻 $(to_title "${language}") ${version}" && \
-    "${asdf_bin}" install "${language}" "${version}" &&
-    "${asdf_bin}" reshim "${language}"
-
-  if [[ -f "${HOME}/.tool-versions" ]]; then
-    if ! (grep -q "\b${language}\b" "${HOME}/.tool-versions"); then
-      echo -e "${language} ${version}" >> "${HOME}/.tool-versions"
-    fi
-  else
-    echo -e "${language} ${version}" > "${HOME}/.tool-versions"
-  fi
-}
-
 function to_lower() {
   echo -e "$1" | awk '{ print tolower($0) }'
 }

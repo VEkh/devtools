@@ -1,0 +1,6 @@
+[tools]
+  elixir = "latest"
+  erlang = "latest"
+  nodejs = "lts"
+  python = "latest"
+  ruby = "latest"

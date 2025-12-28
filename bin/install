@@ -5,7 +5,7 @@ set -e
 
 app_dir=$(realpath "$(dirname "${BASH_SOURCE[0]}")/../")
 
-# ASCII, install_apt_packages, install_asdf, install_language_from_asdf
+# ASCII, install_apt_packages
 # shellcheck disable=1090,1091
 source "${app_dir}/config/.utils"
 
@@ -28,7 +28,45 @@ function init_git_submodules() {
   sh -c "cd ${app_dir} && git submodule update --init --recursive"
 }
 
+function install_mise() {
+  [[ -n "$(which mise)" ]] && return 0
+
+  log_install_start "💻 Mise"
+
+  curl https://mise.run | sh
+
+  ascii_print "🎉 Successfully installed mise!" "green"
+  ascii_print "Follow the above shell rc (.bashrc, .zshrc, etc) edit instructions. Then:" "yellow"
+  ascii_print "  1. Log out then log back in to your shell." "yellow"
+  ascii_print "  2. Navigate back to this directory and continue installation." "yellow"
+  exit 1
+}
+
+function install_mise_config() {
+  if [[ -z "$(which mise)" ]]; then
+    ascii_print "🛑 Install mise before trying to install from its config." "red" >&2
+    exit 1
+  fi
+
+  mise install
+}
+
+function install_mise_tool() {
+  if [[ -z "$(which mise)" ]]; then
+    ascii_print "🛑 Install mise before trying to install from its config." "red" >&2
+    exit 1
+  fi
+
+  mise install "${1}"
+}
+
 function install_node_global_packages() {
+  if [[ -z "$(which npm)" ]]; then
+    ascii_print "🛑 Ensure npm is installed before proceeding." "red" >&2
+    ascii_print "If you just installed \`nodejs\`. You may need to simply re-run this script." "yellow" >&2
+    exit 1
+  fi
+
   installed_packages=$(npm list --global)
 
   for arg in "${@}"; do
@@ -40,9 +78,7 @@ function install_node_global_packages() {
 }
 
 function install_pgformatter() {
-  if [[ -n $(which pg_format) ]]; then
-    return 0
-  fi
+  [[ -n $(which pg_format) ]] && return 0
 
   log_install_start "🐘😍 pgFormatter"
 
@@ -62,21 +98,6 @@ function install_pip3_packages() {
     if ! (echo -e "${installed_packages}" | grep -q "^${arg}\b"); then
       log_install_start "🐍📦 pip3 Package: ${arg}"
       pip3 install "${arg}"
-
-      if (asdf plugin list 2> /dev/null | grep -q "python"); then
-        asdf reshim python
-      fi
-    fi
-  done
-}
-
-function install_yarn_global_packages() {
-  installed_packages=$(yarn global list)
-
-  for arg in "${@}"; do
-    if ! (echo -e "${installed_packages}" | grep -q "\- ${arg}\b"); then
-      log_install_start "🧶 Yarn Package: ${arg}"
-      yarn global add "${arg}"
     fi
   done
 }
@@ -85,7 +106,9 @@ function log_install_start() {
   ascii_print "📦 Installing ${ASCII["reset"]}${ASCII["cyan"]}${1}" "yellow"
 }
 
-if [[ $OSTYPE =~ ^linux.* ]]; then
+function install_linux_dependencies() {
+  [[ ! $OSTYPE =~ ^linux.* ]] && return 0
+
   packages=(
     "libbz2-dev" # Python
     "libffi-dev" # Python
@@ -103,17 +126,17 @@ if [[ $OSTYPE =~ ^linux.* ]]; then
 
   sudo apt-get update
   install_apt_packages "${packages[@]}"
-fi
+}
 
-install_asdf
-install_language_from_asdf "nodejs" "20.15.1"
-install_language_from_asdf "python" "3.13.1"
-install_language_from_asdf "ruby" "3.3.6"
-install_node_global_packages "yarn"
+install_linux_dependencies
+install_mise
+install_mise_tool "erlang" # Must install before elixir
+install_mise_config
 install_node_global_packages "prettier"
 install_pgformatter
-install_pip3_packages "black" "gnureadline" "pynvim"
-init_git_submodules
+install_pip3_packages "black" "gnureadline"
+# init_git_submodules
 create_symlinks
 
 ascii_print "🎉 Successfully installed Dev Tools!" "green"
+ascii_print "Home rc files were updated so you may need to log out then back in for changes to take effect." "cyan"
