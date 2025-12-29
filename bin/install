@@ -129,6 +129,7 @@ function install_linux_dependencies() {
   [[ ! $OSTYPE =~ ^linux.* ]] && return 0
 
   packages=(
+    "fzf" # Fuzzy finder
     "libbz2-dev" # Python
     "libffi-dev" # Python
     "liblzma-dev" # Python
