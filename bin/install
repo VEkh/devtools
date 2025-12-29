@@ -24,7 +24,7 @@ function configure_zsh() {
 
   if [[ ! -d "${custom_plugins_dir}/zsh-autosuggestions" ]]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions \
-      ${custom_plugins_dir}/zsh-autosuggestions
+      "${custom_plugins_dir}/zsh-autosuggestions"
   fi
 }
 
@@ -139,6 +139,7 @@ function install_linux_dependencies() {
     "libyaml-dev" # Ruby
     "make" # Ruby
     "ncdu" # Disk usage
+    "neovim" # Neovim
     "ripgrep" # Ripgrep
     "shellcheck" # Shell formatting
     "tk-dev" # Python
@@ -157,7 +158,7 @@ install_mise_config
 install_node_global_packages "prettier"
 install_pgformatter
 install_pip3_packages "black" "gnureadline"
-# init_git_submodules
+init_git_submodules
 create_symlinks
 
 ascii_print "🎉 Successfully installed Dev Tools!" "green"
