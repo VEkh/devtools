@@ -153,6 +153,7 @@ function install_linux_dependencies() {
 
 install_linux_dependencies
 configure_zsh
+create_symlinks
 install_mise
 install_mise_tool "erlang" # Must install before elixir
 install_mise_config
@@ -160,7 +161,6 @@ install_node_global_packages "prettier"
 install_pgformatter
 install_pip3_packages "black" "gnureadline"
 init_git_submodules
-create_symlinks
 
 ascii_print "🎉 Successfully installed Dev Tools!" "green"
 ascii_print "Home rc files were updated so you may need to log out then back in for changes to take effect." "cyan"
