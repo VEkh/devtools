@@ -70,11 +70,6 @@ ZSH_THEME="robbyrussell"
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-setopt APPEND_HISTORY
-HISTCONTROL=ignoredups:ignorespace
-HISTFILESIZE=2000
-HISTSIZE=1000
-
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
 # You can set one of the optional three formats:
@@ -98,6 +93,12 @@ plugins=(
 )
 
 source ${ZSH}/oh-my-zsh.sh
+
+setopt APPEND_HISTORY
+HISTCONTROL=ignoredups:ignorespace
+HISTFILESIZE=2000
+HISTSIZE=1000
+PROMPT="$fg[cyan]%}$USER@%{$fg[blue]%}%m ${PROMPT}"
 
 # User configuration
 
@@ -130,7 +131,6 @@ source ${ZSH}/oh-my-zsh.sh
 
 [[ -f "${HOME}/.aliases" ]] && source "${HOME}/.aliases"
 [[ -f "${HOME}/.functions" ]] && source "${HOME}/.functions"
-[[ -f "${HOME}/.git-prompt.sh" ]] && source "${HOME}/.git-prompt.sh"
 
 if [[ -f "${HOME}/.local/bin/mise" ]]; then
   eval "$(${HOME}/.local/bin/mise activate zsh)"
