@@ -9,6 +9,9 @@
 # Global env vars
 export EDITOR=$(which vim)
 export ERL_AFLAGS="-kernel shell_history enabled"
+export LANG=en_US.utf8
+export LC_ALL=en_US.utf8
+export LC_CTYPE=en_US.utf8
 export PYTHONSTARTUP="${HOME}/.pythonstartup"
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export TZ=UTC # Set time zone to UTC
