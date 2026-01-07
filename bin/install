@@ -42,6 +42,13 @@ function create_symlinks() {
   done
 }
 
+function install_ai_tools() {
+  if [[ -z "$(which claude)" ]]; then
+    log_install_start "🤖 Claude AI"
+    curl -fsSL https://claude.ai/install.sh | bash
+  fi
+}
+
 function init_git_submodules() {
   log_install_start "🌿 Initializing Git Submodules"
   sh -c "cd ${app_dir} && git submodule update --init --recursive"
@@ -160,6 +167,7 @@ install_mise_config
 install_node_global_packages "prettier"
 install_pgformatter
 install_pip3_packages "black" "gnureadline"
+install_ai_tools
 init_git_submodules
 
 ascii_print "🎉 Successfully installed Dev Tools!" "green"
