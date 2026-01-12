@@ -8,7 +8,6 @@ alias l='ls -CF'
 alias la='ls -A'
 alias ll='ls -alFsh'
 alias cp="cp -i"
-alias rm='trash'
 [[ -n $(which nvim) ]] && alias vim='nvim'
 
 # enable color support of ls and also add handy aliases
