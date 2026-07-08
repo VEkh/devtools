@@ -89,7 +89,7 @@ function install_mise_tool() {
 function install_node_global_packages() {
   if [[ -z "$(which npm)" ]]; then
     ascii_print "🛑 Ensure npm is installed before proceeding." "red" >&2
-    ascii_print "If you just installed \`nodejs\`. You may need to simply re-run this script." "yellow" >&2
+    ascii_print "If you just installed \`nodejs\`. You may need to re-run this script, or log out then re-run it." "yellow" >&2
     exit 1
   fi
 
