@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# NOTE: Requires >= bash 4.0
+
 # shellcheck disable=2016
 
 declare -A ASCII=(

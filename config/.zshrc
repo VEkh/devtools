@@ -2,9 +2,6 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
-# initialize completions with ZSH's compinit
-autoload -Uz compinit && compinit
-
 bindkey -e # Emacs key bindings (ctrl+p, ctrl+n)
 setopt prompt_subst # Prompt expression and parameter expansion
 setopt nonomatch # zsh passes original glob upon fail
@@ -27,7 +24,7 @@ export ZSH="${HOME}/.oh-my-zsh" # Path to your Oh My Zsh installation.
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME="bira"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -92,7 +89,9 @@ ZSH_THEME="robbyrussell"
 plugins=(
   fzf
   git
+  last-working-dir
   zsh-autosuggestions
+  zsh-syntax-highlighting
 )
 
 source ${ZSH}/oh-my-zsh.sh
@@ -101,7 +100,6 @@ setopt APPEND_HISTORY
 HISTCONTROL=ignoredups:ignorespace
 HISTFILESIZE=2000
 HISTSIZE=1000
-PROMPT="$fg[cyan]%}$USER@%{$fg[blue]%}%m ${PROMPT}"
 
 # User configuration
 
