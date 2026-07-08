@@ -133,11 +133,12 @@ HISTSIZE=1000
 [[ -f "${HOME}/.aliases" ]] && source "${HOME}/.aliases"
 [[ -f "${HOME}/.functions" ]] && source "${HOME}/.functions"
 
-if [[ -f "${HOME}/.local/bin/mise" ]]; then
-  eval "$(${HOME}/.local/bin/mise activate zsh)"
+mise_bin=$(which mise)
+if [[ -n "${mise_bin}" ]]; then
+  eval "$(${mise_bin} activate zsh)"
 
   # generate mise completions
-  eval "$(mise completion zsh)"
+  eval "$(${mise_bin} completion zsh)"
 fi
 
 # >>> conda initialize >>>

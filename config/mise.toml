@@ -1,3 +1,5 @@
+[env]
+  _.path=["~/.local/bin"]
 [tools]
   elixir = "latest"
   erlang = "latest"
